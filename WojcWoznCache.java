@@ -9,7 +9,6 @@ interface Cache
 {
     void add(String key, String val);
     String get(String key);
-    //String getClose(String key);
     void cleanUp();
 }
 
@@ -54,19 +53,6 @@ public class WojcWoznCache implements Cache
         else
             return null;
     }
-
-    /*public String getClose(String key)
-    {
-        String lower = cache.lowerKey(key);
-        if(lower != null)
-        {
-            cacheRecord result = cache.get(lower);
-            result.lastAcc = System.currentTimeMillis();
-            return (result.key + " " + result.record);
-        }
-        else
-            return null;
-    }*/
 
     public void cleanUp()
     {

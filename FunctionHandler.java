@@ -21,14 +21,6 @@ public class FunctionHandler
             if(!userCommand.rawOut) System.out.print(userCommand.funcName + " of " + dataOutStr + " is ");
             System.out.println(result.substring(result.indexOf("f")+1, result.length()));
         }
-        /*else if(userCommand.enableClose && ((result = dataCache.getClose(userCommand.operationType + "f" + userCommand.operationData.get(0))) != null))
-        {
-            //currently factorial exclusive feature
-            String output = computeFactorial(userCommand.operationData.get(0), result.substring(result.indexOf("f") + 1, result.indexOf(" ")), result.substring(result.indexOf(" ") + 1, result.length()));
-            if(!userCommand.rawOut) System.out.print(userCommand.funcName + " of " + dataOutStr + " is ");
-            System.out.println(output);
-            dataCache.add("0f" + userCommand.operationData.get(0),output);
-        }*/
         else
         {
             String output = computeFunction(userCommand);
@@ -59,31 +51,6 @@ public class FunctionHandler
 
         return calcData.substring(0, calcData.length() - split.length());
     }
-
-    /*static void getFactorial(Command userCommand, Cache dataCache)
-    {
-        String result = dataCache.get(userCommand.operationType + "f" + userCommand.operationData.get(0));
-
-        if(result != null)
-        {
-            if(!userCommand.rawOut) System.out.print("Factorial of " + userCommand.operationData.get(0) + " is ");
-            System.out.println(result.substring(result.indexOf("f")+1, result.length()));
-        }
-        else if((result = dataCache.getClose(userCommand.operationType + "f" + userCommand.operationData.get(0))) != null)
-        {
-            String output = computeFactorial(userCommand.operationData.get(0), result.substring(result.indexOf("f") + 1, result.indexOf(" ")), result.substring(result.indexOf(" ") + 1, result.length()));
-            if(!userCommand.rawOut) System.out.print("Factorial of " + userCommand.operationData.get(0) + " is ");
-            System.out.println(output);
-            dataCache.add("0f" + userCommand.operationData.get(0),output);
-        }
-        else
-        {
-            String output = computeFactorial(userCommand.operationData.get(0), "1", "1");
-            if(!userCommand.rawOut) System.out.print("Factorial of " + userCommand.operationData.get(0) + " is ");
-            System.out.println(output);
-            dataCache.add("0f" + userCommand.operationData.get(0),output);
-        }
-    }*/
 
     private static String computeFactorial(String param, String startPoint, String startVal)
     {

@@ -113,17 +113,8 @@ public class CalculationServer
             else
             {
                 FunctionHandler.getFunction(userCommand, dataCache);
-                //runProperFunction(userCommand);
             }
         }
     }
-
-    /*void runProperFunction(Command userCommand)
-    {
-        switch(userCommand.operationType)
-        {
-            case 0: FunctionHandler.getFactorial(userCommand, dataCache);
-        }
-    }*/
 
 }

@@ -42,8 +42,6 @@ public class Command
 
     String funcName;
 
-    boolean enableClose = false;
-
     Command(String[] usrInput)
     {
         userArgs = usrInput;
@@ -126,33 +124,13 @@ public class Command
     {
         switch(operationType)
         {
-            case 0: if(operationData.size() < 1) errArg = -3; else if(operationData.size() > 1) errArg = -4; funcName = "Factorial"; enableClose = true; break;
-            default: if(operationData.size() < 2) errArg = -3; else if(operationData.size() > 2) errArg = -4; break;
+            case 0: if(operationData.size() < 1) errArg = -3; else if(operationData.size() > 1) errArg = -4; funcName = "Factorial"; break;
+            default: if(operationData.size() < 2) errArg = -3; else if(operationData.size() > 2) errArg = -4; funcName = "Addition"; break;
         }
 
         if(errArg != 2)
             return true;
         else
             return false;
-    }
-
-
-    /**
-     * Test class for command
-     * @param args Cmd arguments
-     */
-    public static void main(String[] args)
-    {
-        String[] testArray = {"calc", "-f", "0", "5", "-p", "-11"};
-
-        Command parsedCommand = new Command(testArray);
-
-        System.out.println(parsedCommand.errArg);
-        System.out.println(parsedCommand.operationType);
-        System.out.println(parsedCommand.rawOut);
-        System.out.println(parsedCommand.priority);
-
-        for (String test : parsedCommand.operationData)
-            System.out.println(test);
     }
 }

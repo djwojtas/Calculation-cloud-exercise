@@ -28,13 +28,17 @@ public class Output
                 + "  -f [OPERATION NUMBER]\n"
                 + "    Possible operations:\n"
                 + "      0 - factorial, require 1 VALUE, returns factorial of 1st VALUE\n\n"
+                + "      1 - addition, require 2 VALUEs, returns addition of 1st VALUE + 2nd VALUE\n\n"
+                + "      2 - subtraction, require 2 VALUEs, returns subtraction of 1st VALUE - 2nd VALUE\n\n"
+                + "      3 - multiplication, require 2 VALUEs, returns multiplication of 1st VALUE * 2nd VALUE\n\n"
+                + "      4 - division, require 2 VALUEs, returns division of 1st VALUE / 2nd VALUE\n\n"
                 + "  -r\n"
                 + "    Return raw number instead of string, helpful for parsing output.\n\n"
                 + "  -p [PRIORITY]\n"
                 + "    Sets priority of task from -20 (done quickest) to 19 (done slowest)\n\n"
                 + "  VALUEs are integer values used to compute given function\n\n\n"
                 + "AUTHOR\n"
-                + "  Wojciech Wozniczka");
+                + "  Wojciech Wozniczka\n\n");
     }
 
     public static void printServerErr(Command userCommand, String[] args)

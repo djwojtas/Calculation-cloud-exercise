@@ -69,16 +69,6 @@ public class WojcWoznCache implements Cache
             }
         }
     }
-
-    public static void main(String[] args)
-    {
-        Cache test = new WojcWoznCache(100, 100);
-
-
-        test.add("1234", "test1");
-        test.add("2134", "test2");
-
-    }
 }
 
 class cacheRecord

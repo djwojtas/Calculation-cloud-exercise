@@ -1,8 +1,6 @@
 package pl.edu.agh.kis.woznwojc;
 
 import java.math.BigInteger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /** Class that handles process of calculating factorial
  *
@@ -36,6 +34,10 @@ public class FunctionHandler
         switch(userCommand.operationType)
         {
             case 0: return computeFactorial(userCommand.operationData.get(0), "1", "1");
+            case 1: return computeAddition(userCommand.operationData.get(0), userCommand.operationData.get(1));
+            case 2: return computeSubtraction(userCommand.operationData.get(0), userCommand.operationData.get(1));
+            case 3: return computeMultiplication(userCommand.operationData.get(0), userCommand.operationData.get(1));
+            case 4: return computeDivision(userCommand.operationData.get(0), userCommand.operationData.get(1));
             default: return null;
         }
     }
@@ -64,24 +66,23 @@ public class FunctionHandler
         return result.toString();
     }
 
-    public static void main(String[] args)
+    private static String computeAddition(String x, String y)
     {
-        Cache test = new WojcWoznCache(100, 100);
-        String[] testStr = {"calc", "-f", "0", "5"};
-        System.out.println(FunctionHandler.computeFactorial("20", "4", "24"));
+        return (new BigInteger(x)).add(new BigInteger(y)).toString();
+    }
 
-        Matcher testMatch = Pattern.compile("[^([0-9]+f)]").matcher("0f213123");
-        System.out.println(testMatch.find());
+    private static String computeSubtraction(String x, String y)
+    {
+        return (new BigInteger(x)).subtract(new BigInteger(y)).toString();
+    }
 
-        System.out.println(testMatch.group(0));
+    private static String computeMultiplication(String x, String y)
+    {
+        return (new BigInteger(x)).multiply(new BigInteger(y)).toString();
+    }
 
-        String testCase = "0f123123";
-
-        System.out.println(testCase.substring(testCase.indexOf("f")+1, testCase.length()));
-
-        testCase = "0f123123 32323";
-
-        System.out.println(testCase.substring(testCase.indexOf("f")+1, testCase.indexOf(" ")));
-        System.out.println(testCase.substring(testCase.indexOf(" ")+1, testCase.length()));
+    private static String computeDivision(String x, String y)
+    {
+        return (new BigInteger(x)).divide(new BigInteger(y)).toString();
     }
 }

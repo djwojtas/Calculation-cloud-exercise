@@ -27,7 +27,7 @@ public class Output
                 + "  Compute output from given function and values\n\n"
                 + "  -f [OPERATION NUMBER]\n"
                 + "    Possible operations:\n"
-                + "      0 - factorial, require 1 VALUE\n\n"
+                + "      0 - factorial, require 1 VALUE, returns factorial of 1st VALUE\n\n"
                 + "  -r\n"
                 + "    Return raw number instead of string, helpful for parsing output.\n\n"
                 + "  -p [PRIORITY]\n"

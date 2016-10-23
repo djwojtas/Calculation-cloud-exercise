@@ -38,6 +38,12 @@ public class Command
 
     String[] userArgs;
 
+    boolean errNaN = false;
+
+    String funcName;
+
+    boolean enableClose = false;
+
     Command(String[] usrInput)
     {
         userArgs = usrInput;
@@ -67,22 +73,44 @@ public class Command
         {
             String arg = usrInput[i];
 
+            int val = 0;
+
+            try
+            {
+                Matcher matcherParam = Pattern.compile("^-?[0-9]+$").matcher(usrInput[i+1]);
+                if(matcherParam.find())
+                {
+                    val = Integer.parseInt(usrInput[i+1]);
+                    errNaN = false;
+                }
+                else
+                    errNaN = true;
+            }
+            catch(Exception e)
+            {
+                errNaN = true;
+            }
+
+            Matcher matcherVal = Pattern.compile("^-?[0-9]+$").matcher(usrInput[i]);
             Matcher matcherFunc = Pattern.compile("^-f$").matcher(arg);
             Matcher matcherRaw = Pattern.compile("^-r$").matcher(arg);
             Matcher matcherPriority = Pattern.compile("^-p$").matcher(arg);
-            Matcher matcherVal = Pattern.compile("^[0-9]+$").matcher(arg);
 
             if(matcherVal.find())
                 operationData.add(arg);
             else if(matcherRaw.find())
                 rawOut = true;
-            else if(matcherFunc.find())
-                operationType = (byte)Integer.parseInt(usrInput[++i]);
-            else if(matcherPriority.find())
+            else if(matcherFunc.find() && !errNaN)
             {
-                priority = (byte) Integer.parseInt(usrInput[++i]);
+                operationType = (byte)val;
+                ++i;
+            }
+            else if(matcherPriority.find() && !errNaN)
+            {
+                priority = (byte) val;
                 if (priority < -20) priority = -20;
                 else if (priority > 19) priority = 19;
+                ++i;
             }
             else
             {
@@ -98,7 +126,7 @@ public class Command
     {
         switch(operationType)
         {
-            case 0: if(operationData.size() < 1) errArg = -3; else if(operationData.size() > 1) errArg = -4; break;
+            case 0: if(operationData.size() < 1) errArg = -3; else if(operationData.size() > 1) errArg = -4; funcName = "Factorial"; enableClose = true; break;
             default: if(operationData.size() < 2) errArg = -3; else if(operationData.size() > 2) errArg = -4; break;
         }
 
@@ -115,13 +143,14 @@ public class Command
      */
     public static void main(String[] args)
     {
-        String[] testArray = {"calc", "-f", "0", "5"};
+        String[] testArray = {"calc", "-f", "0", "5", "-p", "-11"};
 
         Command parsedCommand = new Command(testArray);
 
         System.out.println(parsedCommand.errArg);
         System.out.println(parsedCommand.operationType);
         System.out.println(parsedCommand.rawOut);
+        System.out.println(parsedCommand.priority);
 
         for (String test : parsedCommand.operationData)
             System.out.println(test);

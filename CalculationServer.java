@@ -10,13 +10,13 @@ import java.util.regex.Pattern;
  */
 public class CalculationServer
 {
-    PriorityQueue<Command> pQueue;
     Cache dataCache;
     byte defaultPriority = 10;
     byte serverErrArg = -1;
     int maxCacheSize = 1000;
-    int cacheTTLms = 15000;
+    int cacheTTLms = 1500000;
     boolean errNaN = false;
+    CalculationQueue<Command> pQueue;
 
 
     public static void main(String args[])
@@ -33,19 +33,9 @@ public class CalculationServer
 
     CalculationServer(String[] args)
     {
-        pQueue = new PriorityQueue<Command>(10, new Comparator<Command>()
-        {
-            public int compare(Command x, Command y)
-            {
-                if(x.priority < y.priority) return -1;
-                if(x.priority > y.priority) return 1;
-                return 0;
-            }
-        });
-
         setServerParams(args);
-
-        dataCache = new Cache(maxCacheSize, cacheTTLms);
+        dataCache = new WojcWoznCache(maxCacheSize, cacheTTLms);
+        pQueue = new WojcWoznCalculationQueue();
     }
 
     public void getUserInput()
@@ -78,21 +68,17 @@ public class CalculationServer
 
             try
             {
-                Matcher matcherVal = Pattern.compile("^[0-9]+$").matcher(args[i+1]);
+                Matcher matcherVal = Pattern.compile("^-?[0-9]+$").matcher(args[i+1]);
                 if(matcherVal.find())
                 {
                     val = Integer.parseInt(args[i+1]);
                     errNaN = false;
                 }
                 else
-                {
                     errNaN = true;
-                }
             }
-
             catch(Exception e)
             {
-                e.printStackTrace();
                 errNaN = true;
             }
 
@@ -118,25 +104,26 @@ public class CalculationServer
 
     void runCalculations()
     {
-        for(int i=0; i<pQueue.size(); ++i)
+        for(; 0<pQueue.size();)
         {
-            Command userCommand = pQueue.poll();
+            Command userCommand = pQueue.pull();
 
             if(userCommand.errArg != -1)
                 Output.printUserErr(userCommand);
             else
             {
-                runProperFunction(userCommand);
+                FunctionHandler.getFunction(userCommand, dataCache);
+                //runProperFunction(userCommand);
             }
         }
     }
 
-    void runProperFunction(Command userCommand)
+    /*void runProperFunction(Command userCommand)
     {
         switch(userCommand.operationType)
         {
             case 0: FunctionHandler.getFactorial(userCommand, dataCache);
         }
-    }
+    }*/
 
 }

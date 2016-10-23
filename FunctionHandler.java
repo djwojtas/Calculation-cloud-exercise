@@ -10,39 +10,82 @@ import java.util.regex.Pattern;
  */
 public class FunctionHandler
 {
-    static void getFactorial(Command userCommand, Cache dataCache)
+    static void getFunction(Command userCommand, Cache dataCache)
+    {
+        String dataStr = concatenateDataVector(userCommand, "");
+        String dataOutStr = concatenateDataVector(userCommand, " and ");
+        String result = dataCache.get(userCommand.operationType + "f" + dataStr);
+
+        if(result != null)
+        {
+            if(!userCommand.rawOut) System.out.print(userCommand.funcName + " of " + dataOutStr + " is ");
+            System.out.println(result.substring(result.indexOf("f")+1, result.length()));
+        }
+        /*else if(userCommand.enableClose && ((result = dataCache.getClose(userCommand.operationType + "f" + userCommand.operationData.get(0))) != null))
+        {
+            //currently factorial exclusive feature
+            String output = computeFactorial(userCommand.operationData.get(0), result.substring(result.indexOf("f") + 1, result.indexOf(" ")), result.substring(result.indexOf(" ") + 1, result.length()));
+            if(!userCommand.rawOut) System.out.print(userCommand.funcName + " of " + dataOutStr + " is ");
+            System.out.println(output);
+            dataCache.add("0f" + userCommand.operationData.get(0),output);
+        }*/
+        else
+        {
+            String output = computeFunction(userCommand);
+            if(!userCommand.rawOut) System.out.print(userCommand.funcName + " of " + dataOutStr + " is ");
+            System.out.println(output);
+            dataCache.add(userCommand.operationType + "f" + userCommand.operationData.get(0), output);
+        }
+
+    }
+
+    static String computeFunction(Command userCommand)
+    {
+        switch(userCommand.operationType)
+        {
+            case 0: return computeFactorial(userCommand.operationData.get(0), "1", "1");
+            default: return null;
+        }
+    }
+
+    static String concatenateDataVector(Command userCommand, String split)
+    {
+        String calcData = "";
+
+        for (String singleData : userCommand.operationData)
+        {
+            calcData += singleData + split;
+        }
+
+        return calcData.substring(0, calcData.length() - split.length());
+    }
+
+    /*static void getFactorial(Command userCommand, Cache dataCache)
     {
         String result = dataCache.get(userCommand.operationType + "f" + userCommand.operationData.get(0));
 
         if(result != null)
+        {
+            if(!userCommand.rawOut) System.out.print("Factorial of " + userCommand.operationData.get(0) + " is ");
             System.out.println(result.substring(result.indexOf("f")+1, result.length()));
+        }
         else if((result = dataCache.getClose(userCommand.operationType + "f" + userCommand.operationData.get(0))) != null)
         {
             String output = computeFactorial(userCommand.operationData.get(0), result.substring(result.indexOf("f") + 1, result.indexOf(" ")), result.substring(result.indexOf(" ") + 1, result.length()));
+            if(!userCommand.rawOut) System.out.print("Factorial of " + userCommand.operationData.get(0) + " is ");
             System.out.println(output);
             dataCache.add("0f" + userCommand.operationData.get(0),output);
         }
         else
         {
-            String output = computeFactorial(userCommand.operationData.get(0));
+            String output = computeFactorial(userCommand.operationData.get(0), "1", "1");
+            if(!userCommand.rawOut) System.out.print("Factorial of " + userCommand.operationData.get(0) + " is ");
             System.out.println(output);
             dataCache.add("0f" + userCommand.operationData.get(0),output);
         }
-    }
+    }*/
 
-    public static String computeFactorial(String param)
-    {
-        BigInteger result = new BigInteger("1");
-
-        for(int i=2; i<=Integer.parseInt(param); ++i)
-        {
-            result = result.multiply(new BigInteger(("" + i)));
-        }
-
-        return result.toString();
-    }
-
-    public static String computeFactorial(String param, String startPoint, String startVal)
+    private static String computeFactorial(String param, String startPoint, String startVal)
     {
         BigInteger result = new BigInteger(startVal);
 
@@ -56,10 +99,8 @@ public class FunctionHandler
 
     public static void main(String[] args)
     {
-        Cache test = new Cache(100, 100);
+        Cache test = new WojcWoznCache(100, 100);
         String[] testStr = {"calc", "-f", "0", "5"};
-        getFactorial(new Command(testStr), test);
-        System.out.println(FunctionHandler.computeFactorial("20"));
         System.out.println(FunctionHandler.computeFactorial("20", "4", "24"));
 
         Matcher testMatch = Pattern.compile("[^([0-9]+f)]").matcher("0f213123");

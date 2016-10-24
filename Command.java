@@ -3,49 +3,108 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/** Class that contains parsed information about user input
+/**
+ * Class that parse user calculation commands and store data about them
  *
- *  @author Wojciech Woźniczka
+ * @author Wojciech Woźniczka
  */
-public class Command
+class Command
 {
     /**
-     *  determines if result will be only number or whole output string
+     *  Determines if result will be only number or whole output string (in {@link FunctionHandler#computeFunction(Command)}
      *  true for Raw output and false for Normal
+     *
+     *  @see FunctionHandler#computeFunction(Command)
      */
     boolean rawOut;
 
     /**
-     *  Determines type of calculation eg. factorial, multiplication, etc.
-     *  0 - factorial;
+     * Determines type of calculation eg. factorial, multiplication, etc:
+     * <ul>
+     *     <li>0 - factorial</li>
+     *     <li>1 - addition</li>
+     *     <li>2 - subtraction</li>
+     *     <li>3 - multiplication</li>
+     *     <li>4 - division</li>
+     * </ul>
+     * Used for checking how much values function need in {@link #checkCalculationFunction()} and
+     * to determine proper computation function in {@link FunctionHandler#computeFunction(Command)}
+     *
+     * @see #checkCalculationFunction()
+     * @see FunctionHandler#computeFunction(Command)
      */
     byte operationType;
 
     /**
-     *  Return index of incorrect argument (user input), -1 for good input, -2 for no input, -3 for too few values for given function, -4 for too many values for given function
+     * Return index of incorrect argument (user input)
+     * <ul>
+     *     <li>-1 for good input</li>
+     *     <li>-2 for no input</li>
+     *     <li>-3 for too few values for given function</li>
+     *     <li>-4 for too many values for given function</li>
+     * </ul>
+     * Used eventually be {@link Output#printUserErr(Command)}
+     *
+     * @see Output#printUserErr(Command)
      */
     byte errArg = -1;
 
     /**
-     *  Determines priority of task (-20 fastest to 19 slowest)
+     * Determines priority of task (-20 fastest to 19 slowest) to sort in {@link CalculationQueue}
+     *
+     * @see CalculationQueue
      */
-    public byte priority = 10;
+    byte priority;
 
     /**
-     *  Vector that hold values that will be used for calculation
+     * Vector that hold values that will be used for calculation in method called by {@link FunctionHandler#computeFunction(Command)}
+     *
+     * @see FunctionHandler#computeFunction(Command)
      */
     Vector<String> operationData = new Vector<>(2);
 
+    /**
+     * Stores arguments passed for parsing to {@link #parseUserInput(String[])}. Used eventually in
+     * {@link Output#printUserErr(Command)} to print argument in which error occurred
+     *
+     * @see #parseUserInput(String[])
+     * @see Output#printUserErr(Command)
+     */
     String[] userArgs;
 
+    /**
+     * Determines if error from {@link #parseUserInput(String[])} was a argument error, or number error for example:<br>
+     * <tt>-badarg 123</tt> is an argument error<br>
+     * <tt>-p 1abc3</tt> is a number error
+     *
+     * @see Output#printUserErr(Command)
+     * @see #parseUserInput(String[])
+     */
     boolean errNaN = false;
 
+    /**
+     * Name of function like 'Factorial' or 'Multiplication'.
+     * Used by {@link FunctionHandler#computeFunction(Command)} to print proper function name in result if
+     * {@link #rawOut} is false.
+     *
+     * @see FunctionHandler#computeFunction(Command)
+     * @see #rawOut
+     */
     String funcName;
 
-    Command(String[] usrInput)
+    /**
+     * Constructor that fills {@link Command} object with data provided in constructor and by user using {@link #parseUserInput(String[])}
+     *
+     * @param usrInput user arguments array, like cmd arguments
+     * @param defPriority default priority for {@link Command} if not provided by user in <b>usrInput</b>
+     *
+     * @see #parseUserInput(String[])
+     */
+    Command(String[] usrInput, byte defPriority)
     {
         userArgs = usrInput;
         parseUserInput(usrInput);
+        priority = defPriority;
     }
 
     /**
@@ -53,7 +112,7 @@ public class Command
      * @param usrInput command line arguments that user passes to server
      * @return Indicates occurrence of error. True if error occurred false if not.
      */
-    public boolean parseUserInput(String[] usrInput)
+    boolean parseUserInput(String[] usrInput)
     {
         if(usrInput.length == 0)
         {
@@ -128,9 +187,6 @@ public class Command
             default: if(operationData.size() < 2) errArg = -3; else if(operationData.size() > 2) errArg = -4; funcName = "Addition"; break;
         }
 
-        if(errArg != 2)
-            return true;
-        else
-            return false;
+        return errArg != 2;
     }
 }

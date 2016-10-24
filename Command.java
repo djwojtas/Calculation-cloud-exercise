@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 /**
  * Class that parse user calculation commands and store data about them
  *
- * @author Wojciech Woźniczka
+ * @author Wojciech Wozniczka
  */
 class Command
 {
@@ -38,6 +38,7 @@ class Command
     /**
      * Return index of incorrect argument (user input)
      * <ul>
+     *     <li>0 or higher for bad argument index</li>
      *     <li>-1 for good input</li>
      *     <li>-2 for no input</li>
      *     <li>-3 for too few values for given function</li>
@@ -108,22 +109,26 @@ class Command
     }
 
     /**
-     * Method parses user input arguments to Command object
+     * Method that parse given arguments and sets {@link Command} parameters to them.
+     * If an error occurs {@link Command#errArg} will be set to bad argument index and
+     * {@link Command#errNaN} will be set to true if error occurred while parsing number.
+     *
      * @param usrInput command line arguments that user passes to server
-     * @return Indicates occurrence of error. True if error occurred false if not.
+     *
+     * @see #checkCalculationFunction()
+     * @see #errArg
+     * @see #errNaN
      */
-    boolean parseUserInput(String[] usrInput)
+    void parseUserInput(String[] usrInput)
     {
         if(usrInput.length == 0)
         {
             errArg = -2;
-            return true;
         }
 
         if(!usrInput[0].equals("calc"))
         {
             errArg = 0;
-            return true;
         }
 
         for(byte i=1; i<usrInput.length; ++i)
@@ -172,21 +177,36 @@ class Command
             else
             {
                 errArg = i;
-                return true;
             }
         }
-
-        return checkCalculationFunction();
+        checkCalculationFunction();
     }
 
-    private boolean checkCalculationFunction()
+    /**
+     * Method that sets {@link #funcName} to proper function name and checks if {@link #operationData} size
+     * (operation values) is proper for given {@link #operationType calcullation function}.
+     * If not, {@link #errArg} is set to -3 if there is not enough values and -4 if too many.
+     *
+     * @see #funcName
+     * @see #operationData
+     * @see #errArg
+     * @see Output#printUserErr(Command)
+     */
+    private void checkCalculationFunction()
     {
         switch(operationType)
         {
-            case 0: if(operationData.size() < 1) errArg = -3; else if(operationData.size() > 1) errArg = -4; funcName = "Factorial"; break;
-            default: if(operationData.size() < 2) errArg = -3; else if(operationData.size() > 2) errArg = -4; funcName = "Addition"; break;
+            case 0: funcName = "Factorial"; break;
+            case 1: funcName = "Addition"; break;
+            case 2: funcName = "Subtraction"; break;
+            case 3: funcName = "Multiplication"; break;
+            case 4: funcName = "Division"; break;
         }
 
-        return errArg != 2;
+        switch(operationType)
+        {
+            case 0: if(operationData.size() < 1) errArg = -3; else if(operationData.size() > 1) errArg = -4; break;
+            default: if(operationData.size() < 2) errArg = -3; else if(operationData.size() > 2) errArg = -4; break;
+        }
     }
 }

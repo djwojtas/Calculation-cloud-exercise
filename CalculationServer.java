@@ -157,8 +157,8 @@ public class CalculationServer
      * @param args arguments that method will parse
      * @return Method return true if error occurred and false if not
      *
-     * @see CalculationServer#serverErrArg
-     * @see CalculationServer#errNaN
+     * @see #serverErrArg
+     * @see #errNaN
      */
     private boolean setServerParams(String[] args)
     {

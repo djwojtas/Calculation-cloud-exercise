@@ -1,11 +1,24 @@
 package pl.edu.agh.kis.woznwojc;
 
-/** Class that handles process of passing correct form of calculation outcome to user
+/**
+ * Class containing methods for displaying output to user which have big volume (like HELP). Methods are static for
+ * easier access from other classes.
  *
- *  @author Wojciech Woźniczka
+ * @author Wojciech Woźniczka
  */
 public class Output
 {
+    /**
+     * Method used for displaying errors in {@link Command#parseUserInput(String[])} in user friendly way.
+     * Output depends on {@link Command#errArg} mainly, but also on {@link Command#errNaN} and {@link Command#userArgs}
+     *
+     * @param userCommand Command used to check for any errors
+     *
+     * @see Command#parseUserInput(String[])
+     * @see Command#errArg
+     * @see Command#errNaN
+     * @see Command#userArgs
+     */
     public static void printUserErr(Command userCommand)
     {
         if(userCommand.errArg == -1)
@@ -43,6 +56,17 @@ public class Output
                 + "  Wojciech Wozniczka\n\n");
     }
 
+    /**
+     * Method used for displaying errors in {@link CalculationServer} in user friendly way.
+     * Output depends on {@link CalculationServer#serverErrArg} mainly, but also on {@link CalculationServer#errNaN} and <b>args</b>
+     *
+     * @param server {@link CalculationServer} used to check for any errors
+     * @param args arguments that were used to parse {@link CalculationServer} options
+     *
+     * @see CalculationServer#setServerParams(String[])
+     * @see CalculationServer#errNaN
+     * @see CalculationServer#serverErrArg
+     */
     public static void printServerErr(CalculationServer server, String[] args)
     {
         if(server.serverErrArg == -1)

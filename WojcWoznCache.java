@@ -26,7 +26,7 @@ interface Cache
  */
 public class WojcWoznCache implements Cache
 {
-    TreeMap<String, cacheRecord> cache;
+    TreeMap<String, CacheRecord> cache;
     private int maxSize;
     private int recordTTL;
 
@@ -48,12 +48,12 @@ public class WojcWoznCache implements Cache
     public void add(String key, String val)
     {
         if(cache.size() <= maxSize)
-            cache.put(key, new cacheRecord(System.currentTimeMillis(), val, key));
+            cache.put(key, new CacheRecord(System.currentTimeMillis(), val, key));
     }
 
     public String get(String key)
     {
-        cacheRecord result = cache.get(key);
+        CacheRecord result = cache.get(key);
         if(result != null)
         {
             result.lastAcc = System.currentTimeMillis();
@@ -65,8 +65,8 @@ public class WojcWoznCache implements Cache
 
     public void cleanUp()
     {
-        Iterator<Entry<String, cacheRecord>> iter = cache.entrySet().iterator();
-        Entry<String, cacheRecord> entry;
+        Iterator<Entry<String, CacheRecord>> iter = cache.entrySet().iterator();
+        Entry<String, CacheRecord> entry;
 
         while (iter.hasNext())
         {
@@ -85,7 +85,7 @@ public class WojcWoznCache implements Cache
  *
  * @see FunctionHandler#computeFunction(Command)
  */
-class cacheRecord
+class CacheRecord implements Comparable<CacheRecord>
 {
     /**
      * Key that was used to store record in {@link WojcWoznCache#cache Treemap}
@@ -95,7 +95,7 @@ class cacheRecord
     /**
      * Last record access in ms (access mean being {@link Cache#add(String, String) add} or {@link Cache#get(String)} get)
      */
-    long lastAcc;
+    Long lastAcc;
 
     /**
      * Stored value
@@ -109,10 +109,22 @@ class cacheRecord
      * @param recordVal Value that need to be stored under {@link #key}
      * @param recordKey Key that was used to store record in {@link WojcWoznCache#cache Treemap}
      */
-    cacheRecord(long recordLastAcc, String recordVal, String recordKey)
+    CacheRecord(long recordLastAcc, String recordVal, String recordKey)
     {
         key = recordKey;
         lastAcc = recordLastAcc;
         record = recordVal;
+    }
+
+    /**
+     * compare function ovveride to implement possibility of sorting by time of last access
+     *
+     * @param record record to compare
+     * @return comparation result
+     */
+    @Override
+    public int compareTo(CacheRecord record) {
+        return (lastAcc < record.lastAcc ? -1 :
+                (lastAcc == record.lastAcc ? 0 : 1));
     }
 }

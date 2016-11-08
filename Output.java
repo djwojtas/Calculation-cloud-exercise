@@ -37,7 +37,7 @@ public class Output
         System.out.println("\n\nDISPLAYING HELP:\n\nNAME\n"
                 + "  CalculationServer - cloud calculation platform\n\n"
                 + "SYNOPSIS\n"
-                + "  calc -t [OPERATION TYPE] [OPTIONS] VALUE1 [VALUE2] ..\n\n"
+                + "  calc -f [OPERATION TYPE] [OPTIONS] VALUE1 [VALUE2] ..\n\n"
                 + "DESCRIPTION\n"
                 + "  Compute output from given function and values\n\n"
                 + "  -f [OPERATION NUMBER]\n"

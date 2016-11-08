@@ -45,7 +45,7 @@ public class CalculationServer
      *
      * @see Cache
      */
-    private int maxCacheSize = 100;
+    private int maxCacheSize = 1000;
 
     /**
      * Determines maximum TTL (time ti live) for record in {@link Cache}
@@ -105,14 +105,14 @@ public class CalculationServer
      * @see Cache
      * @see CalculationQueue
      */
-    private CalculationServer(String[] args)
+    CalculationServer(String[] args)
     {
         if(setServerParams(args))
         {
             Output.printServerErr(this, args);
             exit(0);
         }
-        dataCache = new WojcWoznCache(maxCacheSize, cacheTTLms);
+        dataCache = new SizeControlCache(maxCacheSize);
         pQueue = new WojcWoznCalculationQueue();
     }
 

@@ -3,7 +3,7 @@ package pl.edu.agh.kis.woznwojc;
 import java.util.*;
 
 /**
- * Implementation of {@link Cache}. Provides basic interface functionality along with {@link #maxSize maximum number of elements}
+ * Implementation of {@link Cache}. Provides basic interface functionality along with {@link #maxSize maximum size of elements}
  *
  * @author Wojciech Woźniczka
  *
@@ -19,7 +19,7 @@ public class queueCache implements Cache
     /**
      * Constructor that creates <b>TreeMap</b> as basic storage data structure and <b>PriorityQueue</b> for cleaning cache. It also sets {@link #maxSize}
      *
-     * @param maxCacheSize determines maximum number of elements in cache
+     * @param maxCacheSize determines maximum size of elements in cache
      */
     queueCache(int maxCacheSize)
     {
@@ -75,7 +75,7 @@ public class queueCache implements Cache
     {
         if(currentSize > maxSize)
         {
-            while(currentSize*0.9 > maxSize)
+            while(currentSize > maxSize*0.9)
             {
                 CacheRecord toDel = deleteQueue.poll();
                 cache.remove(toDel.key);

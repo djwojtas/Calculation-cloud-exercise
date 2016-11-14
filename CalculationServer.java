@@ -112,7 +112,7 @@ public class CalculationServer
             Output.printServerErr(this, args);
             exit(0);
         }
-        dataCache = new SizeControlCache(maxCacheSize);
+        dataCache = new queueCache(maxCacheSize);
         pQueue = new WojcWoznCalculationQueue();
     }
 

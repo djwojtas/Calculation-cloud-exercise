@@ -51,15 +51,16 @@ class WojcWoznCalculationQueue implements CalculationQueue<Command>
      */
     WojcWoznCalculationQueue()
     {
-        pQueue = new PriorityQueue<>(new Comparator<Command>()
-        {
-            public int compare(Command x, Command y)
-            {
-                if (x.priority < y.priority) return -1;
-                if (x.priority > y.priority) return 1;
-                return 0;
-            }
-        });
+        pQueue = new PriorityQueue<>(
+                new Comparator<Command>()
+                {
+                    public int compare(Command x, Command y)
+                    {
+                        if (x.priority < y.priority) return -1;
+                        if (x.priority > y.priority) return 1;
+                        return 0;
+                    }
+                });
     }
 
     public void add(Command elem)
